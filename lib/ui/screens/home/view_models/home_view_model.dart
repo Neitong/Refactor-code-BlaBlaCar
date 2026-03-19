@@ -9,12 +9,10 @@ class HomeViewModel {
 
   RidePreference? get selectedPreference => _ridePreferencesState.selectedPreference;
 
-  List<RidePreference> get history =>
-      _ridePreferencesState.preferenceHistory.reversed.toList();
+  List<RidePreference> get history => _ridePreferencesState.preferenceHistory.reversed.toList();
 
   int get maxAllowedSeats => _ridePreferencesState.maxAllowedSeats;
 
-  void selectPreference(RidePreference preference) {
-    _ridePreferencesState.selectPreference(preference);
-  }
+  void selectPreference(RidePreference preference) => _ridePreferencesState.selectPreference(preference);
+  
 }

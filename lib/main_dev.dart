@@ -16,10 +16,10 @@ List<InheritedProvider> get devProviders {
     Provider<RidePreferencesRepository>(
       create: (_) => RidePreferencesRepositoryMock(),
     ),
+
+    //Injected at root
     ChangeNotifierProvider<RidePreferencesState>(
-      create: (context) => RidePreferencesState(
-        repository: context.read<RidePreferencesRepository>(),
-      ),
+      create: (context) => RidePreferencesState(repository: context.read<RidePreferencesRepository>()),
     ),
   ];
 }

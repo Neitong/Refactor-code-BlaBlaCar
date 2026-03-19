@@ -13,15 +13,11 @@ class RidesSelectionViewModel {
   })  : _ridePreferencesState = ridePreferencesState,
         _rideRepository = rideRepository;
 
-  RidePreference get selectedRidePreference =>
-      _ridePreferencesState.selectedPreference!;
+  RidePreference get selectedRidePreference => _ridePreferencesState.selectedPreference!;
 
-  List<Ride> get matchingRides =>
-      _rideRepository.getRidesFor(selectedRidePreference);
+  List<Ride> get matchingRides => _rideRepository.getRidesFor(selectedRidePreference);
 
   int get maxAllowedSeats => _ridePreferencesState.maxAllowedSeats;
 
-  void selectPreference(RidePreference preference) {
-    _ridePreferencesState.selectPreference(preference);
-  }
+  void selectPreference(RidePreference preference) => _ridePreferencesState.selectPreference(preference);
 }
