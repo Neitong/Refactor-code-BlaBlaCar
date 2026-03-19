@@ -17,7 +17,7 @@ class HomeViewModel extends ChangeNotifier {
   int get maxAllowedSeats => _ridePreferencesState.maxAllowedSeats;
 
   void startListening() {
-    _ridePrefsListener ??= () => notifyListeners();
+    _ridePrefsListener = () => notifyListeners();
     _ridePreferencesState.addListener(_ridePrefsListener!);
   }
 

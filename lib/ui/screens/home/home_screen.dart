@@ -13,51 +13,35 @@ import 'widgets/home_content.dart';
 /// - Enter his/her ride preference and launch a search on it
 /// - Or select a last entered ride preferences and launch a search on it
 ///
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (context) {
+        final viewModel = HomeViewModel(
+          ridePreferencesState: context.read<RidePreferencesState>(),
+        );
+        viewModel.startListening();
+        return viewModel;
+      },
+      builder: (context, _) {
+        final viewModel = context.watch<HomeViewModel>();
 
-class _HomeScreenState extends State<HomeScreen> {
-  late final HomeViewModel _viewModel;
+        Future<void> onRidePrefSelected(RidePreference selectedPreference) async {
+          viewModel.selectPreference(selectedPreference);
 
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = HomeViewModel(
-      ridePreferencesState: context.read<RidePreferencesState>(),
-    );
-    _viewModel.addListener(_onViewModelChanged);
-    _viewModel.startListening();
-  }
+          await Navigator.of(context).push(
+            AnimationUtils.createBottomToTopRoute(const RidesSelectionScreen()),
+          );
+        }
 
-  void _onViewModelChanged() {
-    if (!mounted) return;
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _viewModel.removeListener(_onViewModelChanged);
-    _viewModel.dispose();
-    super.dispose();
-  }
-
-  void onRidePrefSelected(RidePreference selectedPreference) async {
-    _viewModel.selectPreference(selectedPreference);
-
-    await Navigator.of(
-      context,
-    ).push(AnimationUtils.createBottomToTopRoute(const RidesSelectionScreen()));
-  }
-
-  @override
-  Widget build(context) {
-    return HomeContent(
-      viewModel: _viewModel,
-      onRidePrefSelected: onRidePrefSelected,
+        return HomeContent(
+          viewModel: viewModel,
+          onRidePrefSelected: onRidePrefSelected,
+        );
+      },
     );
   }
 }
