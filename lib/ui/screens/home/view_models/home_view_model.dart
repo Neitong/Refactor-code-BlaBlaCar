@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+
 import '../../../../model/ride_pref/ride_pref.dart';
 import '../../../states/ride_preferences_state.dart';
 
-class HomeViewModel {
+class HomeViewModel extends ChangeNotifier {
   final RidePreferencesState _ridePreferencesState;
+  VoidCallback? _ridePrefsListener;
 
   HomeViewModel({required RidePreferencesState ridePreferencesState})
       : _ridePreferencesState = ridePreferencesState;
@@ -13,6 +16,19 @@ class HomeViewModel {
 
   int get maxAllowedSeats => _ridePreferencesState.maxAllowedSeats;
 
-  void selectPreference(RidePreference preference) => _ridePreferencesState.selectPreference(preference);
-  
+  void startListening() {
+    _ridePrefsListener ??= () => notifyListeners();
+    _ridePreferencesState.addListener(_ridePrefsListener!);
+  }
+
+  void selectPreference(RidePreference preference) =>
+      _ridePreferencesState.selectPreference(preference);
+
+  @override
+  void dispose() {
+    if (_ridePrefsListener != null) {
+      _ridePreferencesState.removeListener(_ridePrefsListener!);
+    }
+    super.dispose();
+  }
 }
